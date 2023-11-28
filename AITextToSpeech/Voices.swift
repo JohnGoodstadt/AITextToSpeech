@@ -30,7 +30,7 @@ enum LanguageCode: String, Codable {
 	case enIN = "en-IN"
 }
 
-//Usd to determine gender
+//Used to determine gender
 enum SsmlGender: String, Codable {
 	case female = "FEMALE"
 	case male = "MALE"

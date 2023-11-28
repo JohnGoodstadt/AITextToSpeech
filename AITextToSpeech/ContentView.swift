@@ -39,7 +39,6 @@ struct ContentView: View {
 		VStack {
 			VStack {
 				Text("Select a voice:")
-					
 				
 				Picker("Select a voice to speak", selection: $selectedVoice) {
 					ForEach(voices, id: \.self) {
@@ -53,7 +52,6 @@ struct ContentView: View {
 					.padding()
 				
 				Button(action: {
-					
 					GoogleSpeechManager.shared.speak(text:  defaultPhrase, voiceName: selectedVoice) {  result in
 						switch result {
 							case .failure(let error):print("error \(error)")
@@ -98,10 +96,10 @@ struct ContentView: View {
 								phrase = ""
 							}
 						}
-						
+					
 					Spacer()
-				}
-
+				}//: HSTACK
+				
 				
 				ZStack(alignment: .leading) {
 					
@@ -114,11 +112,11 @@ struct ContentView: View {
 							.font(.custom("Helvetica", size: 16))
 							.padding(.all)
 					}
-				}
+				}//: ZSTACK
 				.overlay(
-						RoundedRectangle(cornerRadius: 16)
-							.stroke(.gray, lineWidth: 0.6)
-					)
+					RoundedRectangle(cornerRadius: 16)
+						.stroke(.gray, lineWidth: 0.6)
+				)
 				
 				Text("Tap to speak your text")
 					.font(.title2)
@@ -126,7 +124,7 @@ struct ContentView: View {
 				
 				Button(action: {
 					let phraseToSpeak = phrase.isEmpty ? userPhrase : phrase
-
+					
 					GoogleSpeechManager.shared.speak(text:  phraseToSpeak, voiceName: selectedVoice) {  result in
 						switch result {
 							case .failure(let error):print("error \(error)")
@@ -163,15 +161,13 @@ struct ContentView: View {
 					.padding()
 				
 				Spacer()
-			}
+			}//: VSTACK
 			
-
+			
 			
 		}//: VSTACK
 		.padding()
 		.task {
-			//GET https://texttospeech.googleapis.com/v1/voices
-			//https://cloud.google.com/text-to-speech/docs/reference/rest/v1/voices/list
 			
 			GoogleSpeechManager.shared.getVoicesList(completion: { result in
 				

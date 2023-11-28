@@ -8,7 +8,7 @@
 import UIKit
 
 
-fileprivate let ttsAPIUrl = "https://texttospeech.googleapis.com/v1beta1/text:synthesize"
+fileprivate let APIUrl = "https://texttospeech.googleapis.com/v1beta1/text:synthesize"
 fileprivate let APIKey = "Your Google Key"
 
 class GoogleSpeechManager: NSObject {
@@ -42,7 +42,7 @@ class GoogleSpeechManager: NSObject {
 		DispatchQueue.global(qos: .background).async {
 			let postData = self.buildPost(text: text, voiceName: voiceName)
 			let headers = ["X-Goog-Api-Key": APIKey, "Content-Type": "application/json; charset=utf-8"]
-			let response = self.makeRequest(url: ttsAPIUrl, postData: postData, headers: headers)
+			let response = self.makeRequest(url: APIUrl, postData: postData, headers: headers)
 			
 			// Get the `audioContent` (as a base64 encoded string) from the response.
 			guard let audioContent = response["audioContent"] as? String else {
@@ -73,18 +73,9 @@ class GoogleSpeechManager: NSObject {
 	
 	func getVoicesList(languageCode:String = "en",completion: @escaping ((Result<Data, Error>)) -> Void) {
 		
-		/*
-		 GET https://texttospeech.googleapis.com/v1/voices?languageCode=en-GB&key=[YOUR_API_KEY] HTTP/1.1
-		 
-		 Authorization: Bearer [YOUR_ACCESS_TOKEN]
-		 Accept: application/json
-		 
-		 */
-		
 		if let url = URL(string: "https://texttospeech.googleapis.com/v1/voices?languageCode=\(languageCode)&key=\(APIKey)") {
 			let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
 				guard let data = data else {
-					//print(error)
 					DispatchQueue.main.async {
 						completion(.failure(GoogleSpeechManagerError.invalidResponseError))
 					}
@@ -128,8 +119,7 @@ class GoogleSpeechManager: NSObject {
 			"voice": voiceParams,
 			"audioConfig": [
 				// All available formats here: https://cloud.google.com/text-to-speech/docs/reference/rest/v1beta1/text/synthesize#audioencoding
-				"audioEncoding": "LINEAR16"
-//				"audioEncoding": "MP3" //higher quality - larger and more expensive
+				"audioEncoding": "LINEAR16"//	"audioEncoding": "MP3" //higher quality - larger and more expensive
 			]
 		]
 		
